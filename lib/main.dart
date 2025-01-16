@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:percobaan_ukk_kasir/login.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'login.dart';
 
-void main() {
+void main() async {
+  // Initialize Supabase before running the app
+  await Supabase.initialize(
+    url:
+        'https://iwpixeuosumshiesrlet.supabase.co', // Replace with your Supabase URL
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3cGl4ZXVvc3Vtc2hpZXNybGV0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY5OTMwNjQsImV4cCI6MjA1MjU2OTA2NH0.GkKqrZjS3cxKCZlYAaVTVMpXu510OgZQx8IkaiIXwzE', // Replace with your Supabase anon key
+  );
+
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     initialRoute: '/',
     routes: {
       '/': (context) => WelcomeScreen(),
-      '/login': (context) => const LoginPage()
+      '/login': (context) => const LoginPage(),
     },
   ));
 }
@@ -60,7 +68,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               const Icon(Icons.waving_hand, size: 100, color: Colors.white),
               const SizedBox(height: 20),
               const Text(
-                'Welcome! \nSelamat Datang di Kmart Kami',
+                'Welcome! \nSelamat Datang di K3mart Kami',
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,

@@ -1,4 +1,8 @@
+import 'dart:js_interop';
+
 import 'package:flutter/material.dart';
+import 'package:percobaan_ukk_kasir/homapage.dart';
+import 'package:percobaan_ukk_kasir/main.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,14 +25,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   void _login() {
-    String email = _emailController.text;
+    String username= _usernameController.text;
     String password = _passwordController.text;
 
-    if (email == "aurel" && password == "aurellia") {
+    if (username == "aurel" && password == "aurellia") {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Login berhasil!')),
       );
@@ -46,6 +50,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       appBar: AppBar(
           backgroundColor: Colors.blue,
           leading: IconButton(
@@ -107,9 +112,10 @@ class _LoginPageState extends State<LoginPage> {
                         child: Column(
                           children: [
                             TextField(
-                              controller: _emailController,
+                              controller: _usernameController,
                               decoration: const InputDecoration(
                                 hintText: "Email or username",
+                                prefixIcon: Icon(Icons.person, color: Colors.blueGrey,),
                                 hintStyle: TextStyle(color: Colors.grey),
                                 border: InputBorder.none,
                               ),
@@ -120,6 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                               obscureText: true,
                               decoration: const InputDecoration(
                                 hintText: "Password",
+                                prefixIcon: Icon(Icons.lock, color: Colors.blueGrey,),
                                 hintStyle: TextStyle(color: Colors.grey),
                                 border: InputBorder.none,
                               ),
@@ -170,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const SignUpPage()),
+                                builder: (context) => const HomePage()),
                           );
                         },
                         child: const Center(
@@ -186,71 +193,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ForgotPasswordPage extends StatelessWidget {
-  const ForgotPasswordPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Forgot Password')),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            const TextField(
-              decoration: InputDecoration(
-                hintText: "Enter your email",
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Reset password email sent!')),
-                );
-                Navigator.pop(context);
-              },
-              child: const Text('Send Reset Link'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Home'),
-          bottom: const TabBar(
-            tabs: [
-              Tab(icon: Icon(Icons.dashboard), text: 'Dashboard'),
-              Tab(icon: Icon(Icons.shopping_cart), text: 'Orders'),
-              Tab(icon: Icon(Icons.person), text: 'Profile'),
-            ],
-          ),
-        ),
-        body: const TabBarView(
-          children: [
-            Center(child: Text('Dashboard Content')),
-            Center(child: Text('Orders Content')),
-            Center(child: Text('Profile Content')),
           ],
         ),
       ),
@@ -315,3 +257,50 @@ class SignUpPage extends StatelessWidget {
     );
   }
 }
+
+class ForgotPasswordPage extends StatelessWidget {
+  const ForgotPasswordPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        title: const Text('Forgot Password'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            const TextField(
+              decoration: InputDecoration(
+                hintText: "Enter your email",
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Reset password email sent!')),
+                );
+                Navigator.pop(context);
+              },
+              child: const Text('Send Reset Link'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+
