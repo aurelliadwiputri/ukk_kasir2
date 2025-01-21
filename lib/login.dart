@@ -177,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const HomePage()),
+                                builder: (context) => const SignUpPage()),
                           );
                         },
                         child: const Center(
@@ -186,6 +186,7 @@ class _LoginPageState extends State<LoginPage> {
                             style: TextStyle(
                                 color: Colors.lightBlue, fontSize: 14),
                           ),
+                          
                         ),
                       ),
                     ],
@@ -207,6 +208,7 @@ class SignUpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         title: const Text('Sign Up'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
