@@ -1,38 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:percobaan_ukk_kasir/pelanggan/index.dart';
-import 'package:percobaan_ukk_kasir/pelanggan/insert.dart';
-import 'package:percobaan_ukk_kasir/pelanggan/update.dart';
+import 'package:percobaan_ukk_kasir/penjualan/indexpenjualan.dart';
+import 'package:percobaan_ukk_kasir/penjualan/insertpenjualan.dart';
+import 'package:percobaan_ukk_kasir/penjualan/updatepenjualan.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class PelangganTab extends StatefulWidget {
+class PenjualanTab extends StatefulWidget {
   @override
-  _PelangganTabState createState() => _PelangganTabState();
+  _PenjualanTabState createState() => _PenjualanTabState();
 }
 
-class _PelangganTabState extends State<PelangganTab> {
-  List<Map<String, dynamic>> pelanggan = [];
+class _PenjualanTabState extends State<PenjualanTab> {
+  List<Map<String, dynamic>> Penjualan = [];
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    fetchPelanggan();
+    fetchPenjualan();
   }
 
-  Future<void> fetchPelanggan() async {
+  Future<void> fetchPenjualan() async {
     setState(() {
       isLoading = true;
     });
     try {
       final response =
-          await Supabase.instance.client.from('pelanggan').select();
+          await Supabase.instance.client.from('penjualan').select();
       setState(() {
-        pelanggan = List<Map<String, dynamic>>.from(response);
+        Penjualan = List<Map<String, dynamic>>.from(response);
         isLoading = false;
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error fetching pelanggan: $e')),
+        SnackBar(content: Text('Error fetching penjualan: $e')),
       );
       setState(() {
         isLoading = false;
@@ -40,19 +40,19 @@ class _PelangganTabState extends State<PelangganTab> {
     }
   }
 
-  Future<void> deletePelanggan(int id) async {
+  Future<void> deletepenjualan(int id) async {
     try {
       await Supabase.instance.client
-          .from('pelanggan')
+          .from('penjualan')
           .delete()
-          .eq('pelangganID', id);
-      fetchPelanggan();
+          .eq('penjualanID', id);
+      fetchPenjualan();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Pelanggan berhasil dihapus')),
+        SnackBar(content: Text('penjualan berhasil dihapus')),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error deleting pelanggan: $e')),
+        SnackBar(content: Text('Error deleting penjualan: $e')),
       );
     }
   }
@@ -64,10 +64,10 @@ class _PelangganTabState extends State<PelangganTab> {
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : pelanggan.isEmpty
+          : Penjualan.isEmpty
               ? Center(
                   child: Text(
-                    'Tidak ada pelanggan',
+                    'Tidak ada penjualan',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 )
@@ -78,9 +78,9 @@ class _PelangganTabState extends State<PelangganTab> {
                     mainAxisSpacing: 12,
                   ),
                   padding: EdgeInsets.all(10),
-                  itemCount: pelanggan.length,
+                  itemCount: Penjualan.length,
                   itemBuilder: (context, index) {
-                    final langgan = pelanggan[index];
+                    final langgan = Penjualan[index];
                     return Card(
                       elevation: 4,
                       margin: EdgeInsets.symmetric(vertical: 8),
@@ -92,8 +92,8 @@ class _PelangganTabState extends State<PelangganTab> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              langgan['namapelanggan'] ??
-                                  'Pelanggan tidak tersedia',
+                              langgan['tanggalpenjualan'] ??
+                                  'tanggalpenjualan tidak tersedia',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
@@ -101,7 +101,7 @@ class _PelangganTabState extends State<PelangganTab> {
                             ),
                             SizedBox(height: 4),
                             Text(
-                              langgan['alamat'] ?? 'Alamat tidak tersedia',
+                              langgan['totalharga'] ?? 'totalharga tidak tersedia',
                               style: TextStyle(
                                 fontStyle: FontStyle.italic,
                                 fontSize: 13,
@@ -110,7 +110,7 @@ class _PelangganTabState extends State<PelangganTab> {
                             ),
                             SizedBox(height: 8),
                             Text(
-                              langgan['nomertelepon'] ?? 'Tidak tersedia',
+                              langgan['penjualanID'] ?? 'Tidak tersedia',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 13,
@@ -126,14 +126,13 @@ class _PelangganTabState extends State<PelangganTab> {
                                   icon: Icon(Icons.edit,
                                       color: Colors.blueAccent),
                                   onPressed: () {
-                                    final pelangganID =
-                                        langgan['pelangganID'] ?? 0;
-                                    if (pelangganID != 0) {
+                                    final penjualanID =
+                                        langgan['penjualanID'] ?? 0;
+                                    if (penjualanID != 0) {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => EditPelanggan(
-                                              PelangganID: pelangganID),
+                                          builder: (context) => EditPenjualan(penjualanID: penjualanID)
                                         ),
                                       );
                                     } else {
@@ -141,7 +140,7 @@ class _PelangganTabState extends State<PelangganTab> {
                                           .showSnackBar(
                                         SnackBar(
                                             content: Text(
-                                                'ID pelanggan tidak valid')),
+                                                'ID penjualan tidak valid')),
                                       );
                                     }
                                   },
@@ -154,9 +153,9 @@ class _PelangganTabState extends State<PelangganTab> {
                                       context: context,
                                       builder: (BuildContext context) {
                                         return AlertDialog(
-                                          title: Text('Hapus Pelanggan'),
+                                          title: Text('Hapus penjualan'),
                                           content: Text(
-                                              'Apakah Anda yakin ingin menghapus pelanggan ini?'),
+                                              'Apakah Anda yakin ingin menghapus penjualan ini?'),
                                           actions: [
                                             TextButton(
                                               onPressed: () =>
@@ -165,8 +164,8 @@ class _PelangganTabState extends State<PelangganTab> {
                                             ),
                                             TextButton(
                                               onPressed: () {
-                                                deletePelanggan(
-                                                    langgan['pelangganID']);
+                                                deletepenjualan(
+                                                    langgan['penjualanID']);
                                                 Navigator.pop(context);
                                               },
                                               child: Text('Hapus'),
@@ -189,7 +188,7 @@ class _PelangganTabState extends State<PelangganTab> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddPelanggan()),
+            MaterialPageRoute(builder: (context) => AddPenjualan()),
           );
         },
         child: Icon(Icons.add),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:percobaan_ukk_kasir/pelanggan/index.dart';
-import 'package:percobaan_ukk_kasir/pelanggan/insert.dart';
+import 'package:percobaan_ukk_kasir/penjualan/indexpenjualan.dart';
+
+
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -10,7 +12,6 @@ class HomePage extends StatelessWidget {
     return DefaultTabController(
       length: 4,
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(onPressed: (){},child: Icon(Icons.add),),
         appBar: AppBar(
           backgroundColor: Colors.blue,
           title: const Text('Home'),
@@ -23,8 +24,8 @@ class HomePage extends StatelessWidget {
           bottom: const TabBar(
             tabs: [
               Tab(icon: Icon(Icons.dashboard), text: 'Detail penjual'),
-              Tab(icon: Icon(Icons.shopping_cart), text: 'Produk'),
-              Tab(icon: Icon(Icons.person), text: 'Costumer'),
+              Tab(icon: Icon(Icons.shopping_cart), text: 'Pelanggan'),
+              Tab(icon: Icon(Icons.person), text: 'Produk'),
               Tab(icon: Icon(Icons.dashboard), text: 'Penjualan'),
             ],
           ),
@@ -33,8 +34,8 @@ class HomePage extends StatelessWidget {
           children: [
             Center(child: Text('Detail Penjual Content')),
             PelangganTab(),
-            Center(child: Text('Customer Content')),
-            Center(child: Text('Customer Content')),
+            Center(child: Text('Pelanggan Content')),
+            PenjualanTab(),
           ],
         ),
       ),
