@@ -1,47 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:percobaan_ukk_kasir/produk/indexproduk.dart';
+import 'package:percobaan_ukk_kasir/produk/insertproduk.dart';
+import 'package:percobaan_ukk_kasir/produk/updateproduk.dart';
 import 'package:percobaan_ukk_kasir/homapage.dart';
-import 'package:percobaan_ukk_kasir/penjualan/indexpenjualan.dart';
-import 'package:percobaan_ukk_kasir/penjualan/insertpenjualan.dart';
-import 'package:percobaan_ukk_kasir/penjualan/updatepenjualan.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class AddPenjualan extends StatefulWidget {
-  AddPenjualan({super.key});
+class AddProduk extends StatefulWidget {
+  AddProduk({super.key});
 
   @override
-  State<AddPenjualan> createState() => _AddPenjualanState();
+  State<AddProduk> createState() => _AddProdukState();
 }
 
-class _AddPenjualanState extends State<AddPenjualan> {
-  // final _penjualanid = TextEditingController();
-  final _totalharga = TextEditingController();
-  final _pelangganid = TextEditingController();
+class _AddProdukState extends State<AddProduk> {
+  // final _produkid = TextEditingController();
+  final _namaproduk = TextEditingController();
+  final _harga = TextEditingController();
+  final _stok = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   Future<void> langgan() async {
     if (_formKey.currentState!.validate()) {
-      // final String penjualanid = _penjualanid.text;
-      
-      final double totalharga = double.parse(_totalharga.text); // Konversi ke double
-      final int pelangganid = int.parse(_pelangganid.text); // Konversi ke int
+      // final String produkid = _produkid.text;
+      final String namaproduk = _namaproduk.text;
+      final double harga = double.parse(_harga.text); // Konversi ke double
+      final int stok = int.parse(_stok.text); // Konversi ke int
 
       try {
-        final response = await Supabase.instance.client.from('penjualan').insert({
-          // 'penjualanid': penjualanid,
-          
-          'totalharga': totalharga,
-          'pelangganid': pelangganid,
+        final response = await Supabase.instance.client.from('Produk').insert({
+          // 'produkid': produkid,
+          'namaproduk': namaproduk,
+          'harga': harga,
+          'stok': stok,
         });
 
         if (response != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
                 content: Text(
-                    'Gagal menambahkan penjualan: ${response.error!.message}')),
+                    'Gagal menambahkan produk: ${response.error!.message}')),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Penjualan berhasil ditambahkan')),
+            SnackBar(content: Text('Produk berhasil ditambahkan')),
           );
           Navigator.pushReplacement(
             context,
@@ -61,7 +62,7 @@ class _AddPenjualanState extends State<AddPenjualan> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: Text('Tambah Penjualan'),
+        title: Text('Tambah Produk'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -70,16 +71,29 @@ class _AddPenjualanState extends State<AddPenjualan> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-             
               TextFormField(
-                controller: _totalharga,
+                controller: _namaproduk,
                 decoration: InputDecoration(
-                  labelText: 'totalharga',
+                  labelText: 'Nama Produk',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'totalharga wajib diisi';
+                    return 'Produk wajib diisi';
+                  } 
+                  return null;
+                },
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                controller: _harga,
+                decoration: InputDecoration(
+                  labelText: 'harga',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'harga wajib diisi';
                   }
                   if (double.tryParse(value) == null) {
                     return 'Harus berupa angka';
@@ -89,14 +103,14 @@ class _AddPenjualanState extends State<AddPenjualan> {
               ),
               SizedBox(height: 16),
               TextFormField(
-                controller: _pelangganid,
+                controller: _stok,
                 decoration: InputDecoration(
-                  labelText: 'pelangganid',
+                  labelText: 'stok',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'pelangganid wajib diisi';
+                    return 'stok wajib diisi';
                   }
                   if (double.tryParse(value) == null) {
                     return 'Harus berupa angka';

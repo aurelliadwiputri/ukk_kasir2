@@ -61,6 +61,7 @@ class _AddPelangganState extends State<AddPelanggan> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         title: Text('Tambah Pelanggan'),
       ),
       body: Padding(

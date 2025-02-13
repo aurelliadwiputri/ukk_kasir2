@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:percobaan_ukk_kasir/homapage.dart';
 import 'package:percobaan_ukk_kasir/pelanggan/index.dart';
 import 'package:percobaan_ukk_kasir/pelanggan/insert.dart';
 import 'package:percobaan_ukk_kasir/pelanggan/update.dart';
@@ -73,7 +74,7 @@ class _EditPelangganState extends State<EditPelanggan> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Data pelanggan berhasil diperbarui')),
         );
-        Navigator.pop(context, true);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Gagal memperbarui data pelanggan: $e')),

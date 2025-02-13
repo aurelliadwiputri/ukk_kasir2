@@ -45,7 +45,7 @@ class _PenjualanTabState extends State<PenjualanTab> {
       await Supabase.instance.client
           .from('penjualan')
           .delete()
-          .eq('penjualanID', id);
+          .eq('penjualanid', id);
       fetchPenjualan();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('penjualan berhasil dihapus')),
@@ -92,7 +92,7 @@ class _PenjualanTabState extends State<PenjualanTab> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              langgan['tanggalpenjualan'] ??
+                              langgan['tanggalpenjualan']?.toString() ??
                                   'tanggalpenjualan tidak tersedia',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -101,7 +101,7 @@ class _PenjualanTabState extends State<PenjualanTab> {
                             ),
                             SizedBox(height: 4),
                             Text(
-                              langgan['totalharga'] ?? 'totalharga tidak tersedia',
+                              langgan['totalharga']?.toString() ?? 'totalharga tidak tersedia',
                               style: TextStyle(
                                 fontStyle: FontStyle.italic,
                                 fontSize: 13,
@@ -110,7 +110,7 @@ class _PenjualanTabState extends State<PenjualanTab> {
                             ),
                             SizedBox(height: 8),
                             Text(
-                              langgan['penjualanID'] ?? 'Tidak tersedia',
+                              langgan['penjualanid']?.toString() ?? 'Tidak tersedia',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 13,
@@ -127,12 +127,12 @@ class _PenjualanTabState extends State<PenjualanTab> {
                                       color: Colors.blueAccent),
                                   onPressed: () {
                                     final penjualanID =
-                                        langgan['penjualanID'] ?? 0;
+                                        langgan['penjualanid'] ?? 0;
                                     if (penjualanID != 0) {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => EditPenjualan(penjualanID: penjualanID)
+                                          builder: (context) => EditPenjualan(penjualanid: penjualanID)
                                         ),
                                       );
                                     } else {
@@ -140,7 +140,7 @@ class _PenjualanTabState extends State<PenjualanTab> {
                                           .showSnackBar(
                                         SnackBar(
                                             content: Text(
-                                                'ID penjualan tidak valid')),
+                                                'id penjualan tidak valid')),
                                       );
                                     }
                                   },
@@ -165,7 +165,7 @@ class _PenjualanTabState extends State<PenjualanTab> {
                                             TextButton(
                                               onPressed: () {
                                                 deletepenjualan(
-                                                    langgan['penjualanID']);
+                                                    langgan['penjualanid']);
                                                 Navigator.pop(context);
                                               },
                                               child: Text('Hapus'),

@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:percobaan_ukk_kasir/homapage.dart';
-import 'package:percobaan_ukk_kasir/penjualan/indexpenjualan.dart';
-import 'package:percobaan_ukk_kasir/penjualan/insertpenjualan.dart';
-import 'package:percobaan_ukk_kasir/penjualan/updatepenjualan.dart';
+import 'package:percobaan_ukk_kasir/produk/indexproduk.dart';
+import 'package:percobaan_ukk_kasir/produk/insertproduk.dart';
+import 'package:percobaan_ukk_kasir/produk/updateproduk.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class EditPenjualan extends StatefulWidget {
-  final int penjualanid;
+class EditProduk extends StatefulWidget {
+  final int produkid;
 
-  EditPenjualan({Key? key, required this.penjualanid}) : super(key: key);
+  EditProduk({Key? key, required this.produkid}) : super(key: key);
 
   @override
-  State<EditPenjualan> createState() => _EditPenjualanState();
+  State<EditProduk> createState() => _EditProdukState();
 }
 
-class _EditPenjualanState extends State<EditPenjualan> {
-  final _tanggalpenjualan= TextEditingController();
-  final _totalharga= TextEditingController();
-  final _pelangganid= TextEditingController();
+class _EditProdukState extends State<EditProduk> {
+  final _namaproduk= TextEditingController();
+  final _harga= TextEditingController();
+  final _stok= TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   bool isLoading = false;
@@ -25,33 +25,33 @@ class _EditPenjualanState extends State<EditPenjualan> {
   @override
   void initState() {
     super.initState();
-    _loadPenjualanData();
+    _loadProdukData();
   }
 
-  Future<void> _loadPenjualanData() async {
+  Future<void> _loadProdukData() async {
     setState(() {
       isLoading = true;
     });
     try {
       final data = await Supabase.instance.client
-          .from('penjualan')
+          .from('Produk')
           .select()
-          .eq('penjualanid', widget.penjualanid)
+          .eq('produkid', widget.produkid)
           .single();
 
       if (data == null) {
-        throw Exception('Data penjualan tidak ditemukan');
+        throw Exception('Data produk tidak ditemukan');
       }
 
       setState(() {
-        _tanggalpenjualan.text = data['tanggalpenjualan'] ?? '';
-         _totalharga.text = (data['totalharga'] ?? 0).toString();
-        _pelangganid.text = (data['pelangganid'] ?? 0).toString();
+        _namaproduk.text = data['namaproduk'] ?? '';
+         _harga.text = (data['harga'] ?? 0).toString();
+        _stok.text = (data['stok'] ?? 0).toString();
         isLoading = false;
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal memuat data penjualan: $e')),
+        SnackBar(content: Text('Gagal memuat data produk: $e')),
       );
       setState(() {
         isLoading = false;
@@ -59,25 +59,25 @@ class _EditPenjualanState extends State<EditPenjualan> {
     }
   }
 
-  Future<void> updatePenjualan() async {
+  Future<void> updateProduk() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         isLoading = true;
       });
       try {
-        await Supabase.instance.client.from('penjualan').update({
-          'tanggalpenjualan': _tanggalpenjualan.text,
-           'totalharga': int.tryParse(_totalharga.text) ?? 0, // Konversi String ke int
-          'pelangganid': int.tryParse(_pelangganid.text) ?? 0,
-        }).eq('penjualanid', widget.penjualanid);
+        await Supabase.instance.client.from('Produk').update({
+          'namaproduk': _namaproduk.text,
+           'harga': int.tryParse(_harga.text) ?? 0, // Konversi String ke int
+          'stok': int.tryParse(_stok.text) ?? 0,
+        }).eq('produkid', widget.produkid);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Data penjualan berhasil diperbarui')),
+          SnackBar(content: Text('Data produk berhasil diperbarui')),
         );
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Gagal memperbarui data penjualan: $e')),
+          SnackBar(content: Text('Gagal memperbarui data produk: $e')),
         );
       } finally {
         setState(() {
@@ -92,7 +92,7 @@ class _EditPenjualanState extends State<EditPenjualan> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: Text('Edit Penjualan'),
+        title: Text('Edit Produk'),
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
@@ -104,55 +104,55 @@ class _EditPenjualanState extends State<EditPenjualan> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextFormField(
-                      controller: _tanggalpenjualan,
+                      controller: _namaproduk,
                       decoration: InputDecoration(
-                        labelText: 'tanggal penjualan',
+                        labelText: 'nama produk',
                         border: OutlineInputBorder(),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'tanggal penjualan wajib diisi';
+                          return 'nama produk wajib diisi';
                         }
                         return null;
                       },
                     ),
                     SizedBox(height: 16),
                     TextFormField(
-                      controller: _totalharga,
+                      controller: _harga,
                       decoration: InputDecoration(
-                        labelText: 'totalharga',
+                        labelText: 'harga',
                         border: OutlineInputBorder(),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'totalharga wajib diisi';
+                          return 'harga wajib diisi';
                         }
                         if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-                          return 'totalharga hanya boleh berisi angka';
+                          return 'harga hanya boleh berisi angka';
                         }
                         return null;
                       },
                     ),
                     SizedBox(height: 16),
                     TextFormField(
-                      controller: _pelangganid,
+                      controller: _stok,
                       decoration: InputDecoration(
-                        labelText: 'pelangganid',
+                        labelText: 'stok',
                         border: OutlineInputBorder(),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'pelangganid wajib diisi';
+                          return 'stok wajib diisi';
                         }
                         if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-                          return 'pelangganid hanya boleh berisi angka';
+                          return 'stok hanya boleh berisi angka';
                         }
                         return null;
                       },
                     ),
                     SizedBox(height: 16),
                     ElevatedButton(
-                      onPressed: updatePenjualan,
+                      onPressed: updateProduk,
                       child: Text('Update'),
                     ),
                   ],
